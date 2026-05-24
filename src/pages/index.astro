@@ -1,58 +1,63 @@
 ---
-// src/pages/index.astro
-const site = "https://permittruck.xyz";
-const title = "permittruck.xyz";
-const description = "<fill in: 1-2 sentence value prop for SEO description>";
+import Layout from "../layouts/Layout.astro";
+import { CITIES } from "../lib/cities";
+
+const TITLE = "Food Truck Permits — City Guides & Permit Tracker";
+const DESC =
+  "City-by-city guides for food truck permits in the US, plus a simple dashboard to track issue dates, expirations, and renewals.";
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={site} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<Layout title={TITLE} description={DESC}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Food Truck Permits",
+    description: DESC,
+  })} />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={site} />
-    <meta property="og:site_name" content="permittruck.xyz" />
+  <div class="min-h-screen bg-background text-foreground">
+    <header class="border-b border-border">
+      <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <a href="/" class="font-semibold">Food Truck Permits</a>
+        <nav class="flex items-center gap-4 text-sm">
+          <a href="/login" class="text-muted-foreground hover:text-foreground">Sign in</a>
+          <a href="/app" class="rounded-md bg-primary px-3 py-1.5 text-primary-foreground hover:bg-primary/90">Dashboard</a>
+        </nav>
+      </div>
+    </header>
 
-    <!-- Twitter card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <main class="mx-auto max-w-5xl px-6 py-16">
+      <section class="text-center">
+        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+          Food truck permits, by city.
+        </h1>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+          City-specific guides on what permit you need, what it costs, and how long it
+          takes — plus a simple tracker so you never miss a renewal.
+        </p>
+      </section>
 
-    <!-- JSON-LD structured data: Organization + WebSite (static; domain
-         is known at scaffold time. Update description by hand if needed.) -->
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://permittruck.xyz/#organization",
-      "name": "permittruck.xyz",
-      "url": "https://permittruck.xyz/"
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://permittruck.xyz/#website",
-      "url": "https://permittruck.xyz/",
-      "name": "permittruck.xyz",
-      "publisher": { "@id": "https://permittruck.xyz/#organization" }
-    }
-  ]
-}
-    </script>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p>Scaffolded via <code>portfolio new bootstrap</code>.</p>
+      <section class="mt-16">
+        <h2 class="mb-6 text-xl font-semibold">Browse city permit guides</h2>
+        <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {CITIES.map((c) => (
+            <li>
+              <a
+                href={`/food-truck-permits/${c.slug}`}
+                class="block rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary"
+              >
+                <div class="font-medium">{c.name}, {c.state}</div>
+                <div class="mt-1 text-sm text-muted-foreground">{c.agency}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
-  </body>
-</html>
+
+    <footer class="border-t border-border">
+      <div class="mx-auto max-w-5xl px-6 py-8 text-sm text-muted-foreground">
+        © {new Date().getFullYear()} Food Truck Permits
+      </div>
+    </footer>
+  </div>
+</Layout>

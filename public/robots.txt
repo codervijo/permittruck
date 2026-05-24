@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /app
+Disallow: /login
 
-Sitemap: https://permittruck.xyz/sitemap.xml
+Sitemap: https://permittruck.xyz/sitemap-index.xml
